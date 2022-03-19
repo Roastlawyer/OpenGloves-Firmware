@@ -144,13 +144,22 @@
   #define PIN_THUMB_SPLAY     1
 #elif defined(ESP32)
   //(This configuration is for ESP32 DOIT V1 so make sure to change if you're on another board)
-  #define PIN_PINKY           36
-  #define PIN_RING            39
-  #define PIN_MIDDLE          34
-  #define PIN_INDEX           35
-  #define PIN_THUMB           32
-  #define PIN_JOY_X           33
-  #define PIN_JOY_Y           25
+  // Analog Inputs
+  #define PIN_PINKY           DirectPin<36>()
+  #define PIN_RING            DirectPin<39>()
+  #define PIN_MIDDLE          DirectPin<34>()
+  #define PIN_INDEX           DirectPin<35>()
+  #define PIN_THUMB           DirectPin<32>()
+  #define PIN_JOY_X           DirectPin<33>()
+  #define PIN_JOY_Y           DirectPin<25>()
+  #define PIN_PINKY_SPLAY     DirectPin<1>()
+  #define PIN_RING_SPLAY      DirectPin<1>()
+  #define PIN_MIDDLE_SPLAY    DirectPin<1>()
+  #define PIN_INDEX_SPLAY     DirectPin<1>()
+  #define PIN_THUMB_SPLAY     DirectPin<1>()
+  #define MUX_INPUT_A         DirectPin<34>()
+  #define MUX_INPUT_B         DirectPin<35>()
+  // Digital Imputs
   #define PIN_JOY_BTN         26
   #define PIN_A_BTN           27
   #define PIN_B_BTN           14
@@ -159,6 +168,11 @@
   #define PIN_GRAB_BTN        13 //unused if gesture set
   #define PIN_PNCH_BTN        23 //unused if gesture set
   #define PIN_CALIB           12 //button for recalibration
+  // Ouput pins
+  #define MUX_SEL_0           26
+  #define MUX_SEL_1           25
+  #define MUX_SEL_2           32
+  #define MUX_SEL_3           33
   #define PIN_LED             2
   #define PIN_PINKY_FFB       5  //used for force feedback
   #define PIN_RING_FFB        18 //^
@@ -166,11 +180,6 @@
   #define PIN_INDEX_FFB       21 //^
   #define PIN_THUMB_FFB       17 //^
   #define PIN_HAPTIC          1
-  #define PIN_PINKY_SPLAY     1
-  #define PIN_RING_SPLAY      1
-  #define PIN_MIDDLE_SPLAY    1
-  #define PIN_INDEX_SPLAY     1
-  #define PIN_THUMB_SPLAY     1
 #endif
 
 // You must install RunningMedian library to use this feature

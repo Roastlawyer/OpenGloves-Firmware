@@ -10,8 +10,18 @@
 #include "Haptics.hpp"
 #include "JoyStick.hpp"
 #include "LED.hpp"
+#include "Pin.hpp"
 
 StatusLED led(PIN_LED);
+
+struct {
+  void setup() {
+    pinMode(MUX_SEL_0, OUTPUT);
+    pinMode(MUX_SEL_1, OUTPUT);
+    pinMode(MUX_SEL_2, OUTPUT);
+    pinMode(MUX_SEL_3, OUTPUT);
+  }
+} multiplexer;
 
 // This button is referenced directly by the FW, so we need a pointer to it outside
 // the list of buttons.
