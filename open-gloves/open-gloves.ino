@@ -73,6 +73,9 @@ void setup() {
   // Setup the StatusLED.
   led.setup();
 
+  // Setup the multiplexer
+  multiplexer.setup();
+
   if (ALWAYS_CALIBRATING) {
     for (size_t i = 0; i < calibrated_count; i++) {
       calibrators[i]->enableCalibration();

@@ -3,15 +3,16 @@
 #include "Config.h"
 
 #include "DriverProtocol.hpp"
+#include "Pin.hpp"
 
 class JoyStickAxis : public EncodedInput {
  public:
-  JoyStickAxis(EncodedInput::Type type, int pin, float dead_zone, bool invert) :
+  JoyStickAxis(EncodedInput::Type type, MultiSourcePin* pin, float dead_zone, bool invert) :
     type(type), pin(pin), dead_zone(dead_zone), invert(invert), value(ANALOG_MAX/2) {}
 
   void readInput() override {
     // Read the latest value.
-    int new_value = analogRead(pin);
+    int new_value = pin->analogRead();
 
     // Apply the deadzone to the value.
     new_value = filterDeadZone(new_value);
@@ -48,7 +49,7 @@ class JoyStickAxis : public EncodedInput {
   }
 
   EncodedInput::Type type;
-  int pin;
+  MultiSourcePin* pin;
   float dead_zone;
   bool invert;
   int value;

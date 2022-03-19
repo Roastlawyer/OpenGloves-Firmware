@@ -3,18 +3,18 @@
 #include "Config.h"
 
 #include "DriverProtocol.hpp"
+#include "Pin.hpp"
 
 class Button : public EncodedInput {
  public:
-  Button(EncodedInput::Type type, int pin, bool invert) :
+  Button(EncodedInput::Type type, MultiSourcePin* pin, bool invert) :
     type(type), pin(pin), on_state(invert ? HIGH : LOW), value(false) {}
 
   void setupInput() override {
-    pinMode(pin, INPUT_PULLUP);
   }
 
   virtual void readInput() {
-    value = (digitalRead(pin) == on_state);
+    value = (pin->digitalRead() == on_state);
   }
 
   inline int getEncodedSize() const override {
@@ -33,7 +33,7 @@ class Button : public EncodedInput {
 
  private:
   const EncodedInput::Type type;
-  const int pin;
+  const MultiSourcePin* pin;
   const bool on_state;
   bool value;
 };

@@ -153,50 +153,61 @@
 #elif defined(ESP32)
   // ESP32 pinout. Try to avoid GPIO6 - GPIO11, they are used intenally for FLASH access and may break things if used.
   // Analog Inputs
-  #define PIN_THUMB_K0     32  // First knuckle or whole finger if only one pot is attatched
-  #define PIN_THUMB_K1     0
-  #define PIN_THUMB_K2     1
-  #define PIN_THUMB_SPLAY  2
+  #define PIN_THUMB_K0     DirectPin<32>()  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_THUMB_K1     MultiplexedPin<M0>()
+  #define PIN_THUMB_K2     MultiplexedPin<M1>()
+  #define PIN_THUMB_SPLAY  MultiplexedPin<M2>()
 
-  #define PIN_INDEX_K0     35  // First knuckle or whole finger if only one pot is attatched
-  #define PIN_INDEX_K1     3
-  #define PIN_INDEX_K2     4
-  #define PIN_INDEX_SPLAY  5
+  #define PIN_INDEX_K0     DirectPin<35>()  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_INDEX_K1     MultiplexedPin<M3>()
+  #define PIN_INDEX_K2     MultiplexedPin<M4>()
+  #define PIN_INDEX_SPLAY  MultiplexedPin<M5>()
 
-  #define PIN_MIDDLE_K0    34  // First knuckle or whole finger if only one pot is attatched
-  #define PIN_MIDDLE_K1    6
-  #define PIN_MIDDLE_K2    7
-  #define PIN_MIDDLE_SPLAY 8
+  #define PIN_MIDDLE_K0    DirectPin<34>()  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_MIDDLE_K1    MultiplexedPin<M6>()
+  #define PIN_MIDDLE_K2    MultiplexedPin<M7>()
+  #define PIN_MIDDLE_SPLAY MultiplexedPin<M8>()
 
-  #define PIN_RING_K0      39  // First knuckle or whole finger if only one pot is attatched
-  #define PIN_RING_K1      9
-  #define PIN_RING_K2      10
-  #define PIN_RING_SPLAY   11
+  #define PIN_RING_K0      DirectPin<39>()  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_RING_K1      MultiplexedPin<M9>()
+  #define PIN_RING_K2      MultiplexedPin<M10>()
+  #define PIN_RING_SPLAY   MultiplexedPin<M11>()
 
-  #define PIN_PINKY_K0     36  // First knuckle or whole finger if only one pot is attatched
-  #define PIN_PINKY_K1     12
-  #define PIN_PINKY_K2     13
-  #define PIN_PINKY_SPLAY  14
+  #define PIN_PINKY_K0     DirectPin<36>()  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_PINKY_K1     MultiplexedPin<M12>()
+  #define PIN_PINKY_K2     MultiplexedPin<M13>()
+  #define PIN_PINKY_SPLAY  MultiplexedPin<M14>()
 
-  #define PIN_JOY_X        33
-  #define PIN_JOY_Y        25
+  #define PIN_JOY_X        DirectPin<33>()
+  #define PIN_JOY_Y        DirectPin<25>()
+
+  #define MUX_INPUT_A      33 // Must be a direct pin!
+  #define MUX_INPUT_B      25 // Must be a direct pin!
+
   // Digital Inputs
-  #define PIN_JOY_BTN         23
-  #define PIN_A_BTN           22
-  #define PIN_B_BTN           1
-  #define PIN_MENU_BTN        3
-  #define PIN_CALIB           12 //button for recalibration
-  #define PIN_TRIG_BTN        -1 //unused if gesture set
-  #define PIN_GRAB_BTN        -1 //unused if gesture set
-  #define PIN_PNCH_BTN        -1 //unused if gesture set
+  #define PIN_JOY_BTN      DirectPin<23>()
+  #define PIN_A_BTN        DirectPin<22>()
+  #define PIN_B_BTN        DirectPin<1>()
+  #define PIN_MENU_BTN     DirectPin<3>()
+  #define PIN_CALIB        DirectPin<12>() //button for recalibration
+  #define PIN_TRIG_BTN     DirectPin<-1>() //unused if gesture is enabled
+  #define PIN_GRAB_BTN     DirectPin<-1>() //unused if gesture is enabled
+  #define PIN_PNCH_BTN     DirectPin<-1>() //unused if gesture is enabled
+
   // Ouput pins
-  #define PIN_LED             2
-  #define PIN_THUMB_FFB       21
-  #define PIN_INDEX_FFB       19
-  #define PIN_MIDDLE_FFB      18
-  #define PIN_RING_FFB        5
-  #define PIN_PINKY_FFB       17
-  #define PIN_HAPTIC          16
+  // These pins do not support multiplexing since pins are shared, any set output would only last
+  // until the multiplex changes it's connection.
+  #define MUX_SEL_0        26
+  #define MUX_SEL_1        27
+  #define MUX_SEL_2        14
+  #define MUX_SEL_3        12
+  #define PIN_LED          2
+  #define PIN_THUMB_FFB    21
+  #define PIN_INDEX_FFB    19
+  #define PIN_MIDDLE_FFB   18
+  #define PIN_RING_FFB     5
+  #define PIN_PINKY_FFB    17
+  #define PIN_HAPTIC       16
 #endif
 
 // You must install RunningMedian library to use this feature

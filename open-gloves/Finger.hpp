@@ -4,6 +4,7 @@
 
 #include "Calibration.hpp"
 #include "DriverProtocol.hpp"
+#include "Pin.hpp"
 
 // Base finger class with externalized features.
 class Finger : public EncodedInput, public Calibrated {
@@ -18,7 +19,7 @@ class Finger : public EncodedInput, public Calibrated {
   bool invert_splay;
 };
 
-#define ConstructorArgs EncodedInput::Type type, bool invert_curl, bool invert_splay, int k0,  int k1,  int k2,  int splay
+#define ConstructorArgs EncodedInput::Type type, bool invert_curl, bool invert_splay, MultiSourcePin* k0,  MultiSourcePin* k1,  MultiSourcePin* k2,  MultiSourcePin* splay
 #define all_args type, invert_curl, invert_splay, k0, k1, k2, splay
 
 // Declare unspecialized type, but don't define it so any unspecialized version won't compile (eg knuckle count 4).
@@ -37,7 +38,7 @@ class ConfigurableFinger<false, 1, _, CurlCalibrator, SplayCalibrator> : public 
 
   void readInput() override {
     // Read the latest value.
-    int new_value = analogRead(pin);
+    int new_value = pin->analogRead();
 
     // Apply configured modifiers.
     if (invert_curl) {
@@ -81,7 +82,7 @@ class ConfigurableFinger<false, 1, _, CurlCalibrator, SplayCalibrator> : public 
   }
 
  protected:
-  int pin;
+  MultiSourcePin* pin;
   int value;
   CurlCalibrator calibrator;
 };
@@ -99,7 +100,7 @@ class ConfigurableFinger<false, 2, knuckle_offset, CurlCalibrator, SplayCalibrat
     // Read from the two pins that we have.
     for (size_t i = 0; i < 2; i++) {
       // Read the latest value.
-      int new_value = analogRead(pins[i]);
+      int new_value = pins[i]->analogRead();
 
       // Apply configured modifiers.
       if (invert_curl) {
@@ -159,7 +160,7 @@ class ConfigurableFinger<false, 2, knuckle_offset, CurlCalibrator, SplayCalibrat
   }
 
  protected:
-  int pins[2];
+  MultiSourcePin*  pins[2];
   int values[3];
   CurlCalibrator calibrators[2];
 };
@@ -177,7 +178,7 @@ class ConfigurableFinger<false, 3, knuckle_offset, CurlCalibrator, SplayCalibrat
     // Read from the three pins that we have.
     for (size_t i = 0; i < 3; i++) {
       // Read the latest value.
-      int new_value = analogRead(pins[i]);
+      int new_value = pins[i]->analogRead();
 
       // Apply configured modifiers.
       if (invert_curl) {
@@ -232,7 +233,7 @@ class ConfigurableFinger<false, 3, knuckle_offset, CurlCalibrator, SplayCalibrat
   }
 
  protected:
-  int pins[3];
+  MultiSourcePin*  pins[3];
   int values[3];
   CurlCalibrator calibrators[3];
 };
@@ -249,7 +250,7 @@ class SplaySupport : public BaseFinger {
 
   void readInput() override {
     BaseFinger::readInput();
-    int new_splay_value = analogRead(splay_pin);
+    int new_splay_value = splay_pin->analogRead();
     // Update the calibration
     if (this->calibrate) {
       splay_calibrator.update(new_splay_value);
@@ -284,7 +285,7 @@ class SplaySupport : public BaseFinger {
   }
 
  protected:
-  int splay_pin;
+  MultiSourcePin* splay_pin;
   int splay_value;
   SplayCalibrator splay_calibrator;
 };

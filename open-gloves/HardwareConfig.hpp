@@ -10,36 +10,46 @@
 #include "Haptics.hpp"
 #include "JoyStick.hpp"
 #include "LED.hpp"
+#include "Pin.hpp"
 
 StatusLED led(PIN_LED);
 
+struct {
+  void setup() {
+    pinMode(MUX_SEL_0, OUTPUT);
+    pinMode(MUX_SEL_1, OUTPUT);
+    pinMode(MUX_SEL_2, OUTPUT);
+    pinMode(MUX_SEL_3, OUTPUT);
+  }
+} multiplexer;
+
 // This button is referenced directly by the FW, so we need a pointer to it outside
 // the list of buttons.
-Button calibration_button(EncodedInput::Type::CALIBRATE, PIN_CALIB, INVERT_CALIB);
+Button calibration_button(EncodedInput::Type::CALIBRATE, new PIN_CALIB, INVERT_CALIB);
 
 Button* buttons[BUTTON_COUNT] = {
-  new Button(EncodedInput::Type::A_BTN, PIN_A_BTN, INVERT_A),
-  new Button(EncodedInput::Type::B_BTN, PIN_B_BTN, INVERT_B),
-  new Button(EncodedInput::Type::MENU, PIN_MENU_BTN, INVERT_MENU),
+  new Button(EncodedInput::Type::A_BTN, new PIN_A_BTN, INVERT_A),
+  new Button(EncodedInput::Type::B_BTN, new PIN_B_BTN, INVERT_B),
+  new Button(EncodedInput::Type::MENU, new PIN_MENU_BTN, INVERT_MENU),
   &calibration_button,
   #if ENABLE_JOYSTICK
-    new Button(EncodedInput::Type::JOY_BTN, PIN_JOY_BTN, INVERT_JOY),
+    new Button(EncodedInput::Type::JOY_BTN, new PIN_JOY_BTN, INVERT_JOY),
   #endif
   #if !TRIGGER_GESTURE
-    new Button(EncodedInput::Type::TRIGGER, PIN_TRIG_BTN, INVERT_TRIGGER),
+    new Button(EncodedInput::Type::TRIGGER, new PIN_TRIG_BTN, INVERT_TRIGGER),
   #endif
   #if !GRAB_GESTURE
-    new Button(EncodedInput::Type::GRAB, PIN_GRAB_BTN, INVERT_GRAB),
+    new Button(EncodedInput::Type::GRAB, new PIN_GRAB_BTN, INVERT_GRAB),
   #endif
   #if !PINCH_GESTURE
-    new Button(EncodedInput::Type::PINCH, PIN_PNCH_BTN, INVERT_PINCH),
+    new Button(EncodedInput::Type::PINCH, new PIN_PNCH_BTN, INVERT_PINCH),
   #endif
 
 };
 
 #define FINGER_PARAMS(F) \
-  EncodedInput::Type::F, INVERT_CURL, INVERT_SPLAY, PIN_##F##_K0, PIN_##F##_K1, PIN_##F##_K2, \
-  PIN_##F##_SPLAY
+  EncodedInput::Type::F, INVERT_CURL, INVERT_SPLAY, new PIN_##F##_K0, new PIN_##F##_K1, \
+      new PIN_##F##_K2, new PIN_##F##_SPLAY
 
 #if ENABLE_THUMB
   ConfigurableFinger<ENABLE_SPLAY, THUMB_KNUCKLE_COUNT, EncodedInput::KnuckleThumbOffset>
@@ -59,8 +69,8 @@ Finger* fingers[FINGER_COUNT] = {
 
 JoyStickAxis* joysticks[JOYSTICK_COUNT] = {
   #if ENABLE_JOYSTICK
-    new JoyStickAxis(EncodedInput::Type::JOY_X, PIN_JOY_X, JOYSTICK_DEADZONE, INVERT_JOY_X),
-    new JoyStickAxis(EncodedInput::Type::JOY_Y, PIN_JOY_Y, JOYSTICK_DEADZONE, INVERT_JOY_Y)
+    new JoyStickAxis(EncodedInput::Type::JOY_X, new PIN_JOY_X, JOYSTICK_DEADZONE, INVERT_JOY_X),
+    new JoyStickAxis(EncodedInput::Type::JOY_Y, new PIN_JOY_Y, JOYSTICK_DEADZONE, INVERT_JOY_Y)
   #endif
 };
 
