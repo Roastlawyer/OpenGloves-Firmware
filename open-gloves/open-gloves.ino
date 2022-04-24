@@ -133,5 +133,5 @@ void loop() {
     outputs[i]->updateOutput();
   }
 
-  delay(LOOP_TIME);
+  delay(COMM_DELAY);
 }

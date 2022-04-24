@@ -4,6 +4,11 @@ constexpr float accurateMap(float x, float in_min, float in_max, float out_min, 
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+// Same as the above, but both mins are 0.
+constexpr float simpleAccurateMap(float x, float in_max, float out_max) {
+  return x * out_max / in_max;
+}
+
 class Calibrated {
  public:
   virtual void resetCalibration() = 0;
@@ -20,15 +25,10 @@ class Calibrated {
   bool calibrate;
 };
 
-template<typename T>
+template<typename T, T output_min, T output_max>
 class MinMaxCalibrator {
  public:
-  MinMaxCalibrator(T output_min_,T output_max_, bool clamp_) :
-    output_min(output_min_),
-    output_max(output_max_),
-    value_min(output_max_),
-    value_max(output_min_),
-    clamp(clamp_) {}
+  MinMaxCalibrator() : value_min(output_max), value_max(output_min) {}
 
   void reset() {
     value_min = output_max;
@@ -36,26 +36,59 @@ class MinMaxCalibrator {
   }
 
   void update(T input) {
-    // Either update the min or the max.
-    // We shouldn't ever need to update both.
+    // Update the min and the max.
     if (input < value_min) value_min = input;
     if (input > value_max) value_max = input;
   }
 
-  T calibrate(T input, T input_min, T input_max) const {
+  T calibrate(T input) const {
     // This means we haven't had any calibration data yet.
     // Return a neutral value right in the middle of the output range.
     if (value_min > value_max) return (output_min + output_max) / 2.0f;
 
     // Map the input range to the output range.
-    T output = accurateMap(input, value_min, value_max, input_min, input_max);
-    return clamp ? constrain(output, output_min, output_max) : output;
+    T output = accurateMap(input, value_min, value_max, output_min, output_max);
+
+    // Lock the range to the output.
+    return constrain(output, output_min, output_max);
   }
 
-private:
- T output_min;
- T output_max;
- T value_min;
- T value_max;
- bool clamp;
+ private:
+  T value_min;
+  T value_max;
+};
+
+template<typename T, T sensor_max, T driver_max_deviation, T output_min, T output_max>
+class CenterPointDeviationCalibrator {
+ public:
+  CenterPointDeviationCalibrator() : range_min(sensor_max), range_max(0) {}
+
+  void reset() {
+    range_min = sensor_max;
+    range_max = 0;
+  }
+
+  void update(T input) {
+    // Update the min and the max.
+    if (input < range_min) range_min = simpleAccurateMap(input, output_max, sensor_max);
+    if (input > range_max) range_max = simpleAccurateMap(input, output_max, sensor_max);
+  }
+
+  T calibrate(T input) const {
+    // Find the center point of the sensor so we know how much we have deviated from it.
+    T center = (range_min + range_max) / 2.0f;
+
+    // Map the input to the sensor range of motion.
+    T output = simpleAccurateMap(input, output_max, sensor_max);
+
+    // Find the deviation from the center and constrain it to the maximum that the driver supports.
+    output = constrain(output - center, -driver_max_deviation, driver_max_deviation);
+
+    // Finally map the deviation from the center back to the output range.
+    return map(output, -driver_max_deviation, driver_max_deviation, output_min, output_max);
+  }
+
+ private:
+  T range_min;
+  T range_max;
 };

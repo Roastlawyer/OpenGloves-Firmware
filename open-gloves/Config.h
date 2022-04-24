@@ -10,6 +10,18 @@
  * github.com/JohnRThomas/opengloves-firmware/
  */
 
+// Automatically set ANALOG_MAX depending on the microcontroller
+#if defined(__AVR__)
+#define ANALOG_MAX 1023
+#elif defined(ESP32)
+#define ANALOG_MAX 4095
+#else
+#error "This board doesn't have an auto ANALOG_MAX assignment, please set it manually by uncommenting ANALOG_MAX OVERRIDE!"
+//ANALOG_MAX OVERRIDE:
+// Uncomment and set as needed (only touch if you know what you are doing)
+//#define ANALOG_MAX 4095
+#endif
+
 // Which communication protocol to use
 #define COMM_USB        0
 #define COMM_BLUETOOTH  1
@@ -23,6 +35,7 @@
 #define WIFI_SERIAL_SSID        "WIFI SSID here"
 #define WIFI_SERIAL_PASSWORD    "password here"
 #define WIFI_SERIAL_PORT        80
+#define COMM_DELAY              4 // How much time between data sends (ms)
 
 // Button Settings
 // If a button registers as pressed when not and vice versa (eg. using normally-closed switches),
@@ -44,10 +57,17 @@
 #define JOYSTICK_DEADZONE 0.1 //deadzone in the joystick to prevent drift. Value out of 1.0.
 
 // Finger settings
-#define ENABLE_THUMB   true  // If for some reason you don't want to track the thumb
-#define ENABLE_SPLAY   false // Track the side to side motion of fingers
-#define INVERT_FLEXION false
-#define INVERT_SPLAY   false
+#define ENABLE_THUMB        true  // If for some reason you don't want to track the thumb
+#define ENABLE_SPLAY        false // Track the side to side motion of fingers
+#define INVERT_CURL         false
+#define INVERT_SPLAY        false
+
+// Calibration Settings (See Calibration.hpp for more information)
+#define CALIBRATION_LOOPS   -1 // How many loops should be calibrated. Set to -1 to always be calibrated.
+#define CALIBRATION_CURL    MinMaxCalibrator<int, 0, ANALOG_MAX>
+#define DRIVER_MAX_SPLAY    20  // The maximum deviation from the center point the driver supports.
+#define SENSOR_MAX_SPLAY    270 // The maximum total range of rotation of the sensor.
+#define CALIBRATION_SPLAY   CenterPointDeviationCalibrator<int, SENSOR_MAX_SPLAY, DRIVER_MAX_SPLAY, 0, ANALOG_MAX>
 
 // Gesture enables, make false to use button override
 #define TRIGGER_GESTURE true
@@ -152,31 +172,6 @@
   #define PIN_INDEX_SPLAY     1
   #define PIN_THUMB_SPLAY     1
 #endif
-
-// Advanced Config. Don't touch this unless you know what you are doing. Only for the pros XD
-#define LOOP_TIME          4 //How much time between data sends (ms), set to 0 for a good time :)
-#define CALIBRATION_LOOPS -1 //How many loops should be calibrated. Set to -1 to always be calibrated.
-
-//Automatically set ANALOG_MAX depending on the microcontroller
-#if defined(__AVR__)
-#define ANALOG_MAX 1023
-#elif defined(ESP32)
-#define ANALOG_MAX 4095
-#else
-#error "This board doesn't have an auto ANALOG_MAX assignment, please set it manually by uncommenting ANALOG_MAX OVERRIDE!"
-//ANALOG_MAX OVERRIDE:
-// Uncomment and set as needed (only touch if you know what you are doing)
-//#define ANALOG_MAX 4095
-#endif
-
-//Filtering and clamping analog inputs
-#define CLAMP_ANALOG_MAP true //clamp the mapped analog values from 0 to ANALOG_MAX
-
-// Enable and set min and max to match your sensor's expected raw value range
-// This discards any spurious values outside of the useful range
-#define CLAMP_FLEXION false       // Clamp the raw flexion values
-#define CLAMP_MIN     0           // Minimum value from the flexion sensors
-#define CLAMP_MAX     ANALOG_MAX  // Maximum value from the flexion sensors
 
 // You must install RunningMedian library to use this feature
 // https://www.arduino.cc/reference/en/libraries/runningmedian/

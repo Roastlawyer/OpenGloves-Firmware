@@ -13,7 +13,7 @@ class Finger : public EncodedInput, public Calibrated {
  public:
   Finger(EncodedInput::Type enc_type, int pin) :
     type(enc_type), pin(pin), value(0),
-    median(MEDIAN_SAMPLES), calibrator(0, ANALOG_MAX, CLAMP_ANALOG_MAP) {}
+    median(MEDIAN_SAMPLES) {}
 
   void readInput() override {
     // Read the latest value.
@@ -29,17 +29,13 @@ class Finger : public EncodedInput, public Calibrated {
       new_value = median.getMedian();
     #endif
 
-    #if CLAMP_FLEXION
-      new_value = constrain(new_value, CLAMP_MIN, CLAMP_MAX);
-    #endif
-
     // Update the calibration
     if (calibrate) {
       calibrator.update(new_value);
     }
 
     // set the value to the calibrated value.
-    value = calibrator.calibrate(new_value, 0, ANALOG_MAX);
+    value = calibrator.calibrate(new_value);
   }
 
   inline int getEncodedSize() const override {
@@ -62,7 +58,7 @@ class Finger : public EncodedInput, public Calibrated {
   // Allow others access to the finger's calibrator so they can
   // map other values on this range.
   int mapOntoCalibratedRange(int input, int min, int max) const {
-    return calibrator.calibrate(input, min, max);
+    return calibrator.calibrate(input);
   }
 
  protected:
@@ -76,14 +72,13 @@ class Finger : public EncodedInput, public Calibrated {
     int median;
   #endif
 
-  MinMaxCalibrator<int> calibrator;
+  CALIBRATION_CURL calibrator;
 };
 
 class SplayFinger : public Finger {
  public:
   SplayFinger(EncodedInput::Type enc_type, int pin, int splay_pin) :
-    Finger(enc_type, pin), splay_pin(splay_pin), splay_value(0),
-    splay_calibrator(0, ANALOG_MAX, CLAMP_ANALOG_MAP) {}
+    Finger(enc_type, pin), splay_pin(splay_pin), splay_value(0) {}
 
   void readInput() override {
     Finger::readInput();
@@ -94,7 +89,7 @@ class SplayFinger : public Finger {
     }
 
     // set the value to the calibrated value.
-    splay_value = splay_calibrator.calibrate(new_splay_value, 0, ANALOG_MAX);
+    splay_value = splay_calibrator.calibrate(new_splay_value);
   }
 
   inline int getEncodedSize() const override {
@@ -113,5 +108,5 @@ class SplayFinger : public Finger {
  protected:
   int splay_pin;
   int splay_value;
-  MinMaxCalibrator<int> splay_calibrator;
+  CALIBRATION_SPLAY splay_calibrator;
 };

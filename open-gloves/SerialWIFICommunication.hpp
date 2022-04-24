@@ -22,7 +22,7 @@ class WIFISerialCommunication : public ICommunication {
       return;
     }
 
-    Serial.begin(115200);
+    Serial.begin(SERIAL_BAUD_RATE);
     Serial.println("Your board is now connected to: ");
     Serial.println(WiFi.localIP());
     m_server.begin();
