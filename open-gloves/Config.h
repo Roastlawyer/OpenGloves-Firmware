@@ -7,7 +7,7 @@
  *         John Thomas  - Exia
  *         MinyStreem
  * lucidvrtech.com
- * github.com/JohnRThomas/opengloves-firmware/
+ * github.com/JohnRThomas/OpenGloves-Firmware/
  */
 
 // Automatically set ANALOG_MAX depending on the microcontroller
@@ -58,9 +58,10 @@
 
 // Finger settings
 #define ENABLE_THUMB        true  // If for some reason you don't want to track the thumb
-#define ENABLE_SPLAY        false // Track the side to side motion of fingers
+#define ENABLE_SPLAY        true // Track the side to side motion of fingers
 #define INVERT_CURL         false
 #define INVERT_SPLAY        false
+#define KNUCKLE_COUNT       1 // How many knuckles each finger has
 
 // Calibration Settings (See Calibration.hpp for more information)
 #define CALIBRATION_LOOPS   -1 // How many loops should be calibrated. Set to -1 to always be calibrated.
@@ -98,6 +99,9 @@
 #define FORCE_FEEDBACK_MAX        1000 // Value of 1000 means maximum limit.
 #define FORCE_FEEDBACK_RELEASE      50 // To prevent hardware damage, value passed the limit for when to release FFB. (Set to FORCE_FEEDBACK_MAX to disable)
 
+// Settings for the mutiplexer
+#define ENABLE_MULTIPLEXER false
+
 // Counts of objects in the system used for looping
 // Inputs
 #define GESTURE_COUNT        (TRIGGER_GESTURE + GRAB_GESTURE + PINCH_GESTURE)
@@ -114,7 +118,7 @@
 
 //PINS CONFIGURATION
 #if defined(__AVR__)
-  //(This configuration is for Arduino Nano so make sure to change if you're on another board)
+  // Arduino Nano pinout.
   #define PIN_PINKY           A0
   #define PIN_RING            A1
   #define PIN_MIDDLE          A2
@@ -143,37 +147,56 @@
   #define PIN_INDEX_SPLAY     1
   #define PIN_THUMB_SPLAY     1
 #elif defined(ESP32)
-  //(This configuration is for ESP32 DOIT V1 so make sure to change if you're on another board)
-  #define PIN_PINKY           36
-  #define PIN_RING            39
-  #define PIN_MIDDLE          34
-  #define PIN_INDEX           35
-  #define PIN_THUMB           32
-  #define PIN_JOY_X           33
-  #define PIN_JOY_Y           25
-  #define PIN_JOY_BTN         26
-  #define PIN_A_BTN           27
-  #define PIN_B_BTN           14
-  #define PIN_MENU_BTN        27
-  #define PIN_TRIG_BTN        12 //unused if gesture set
-  #define PIN_GRAB_BTN        13 //unused if gesture set
-  #define PIN_PNCH_BTN        23 //unused if gesture set
+  // ESP32 pinout. Try to avoid GPIO6 - GPIO11, they are used intenally for FLASH access and may break things if used.
+  // Analog Inputs
+  #define PIN_THUMB_K0     32  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_THUMB_K1     0
+  #define PIN_THUMB_K2     1
+  #define PIN_THUMB_SPLAY  2
+
+  #define PIN_INDEX_K0     35  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_INDEX_K1     3
+  #define PIN_INDEX_K2     4
+  #define PIN_INDEX_SPLAY  5
+
+  #define PIN_MIDDLE_K0    34  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_MIDDLE_K1    6
+  #define PIN_MIDDLE_K2    7
+  #define PIN_MIDDLE_SPLAY 8
+
+  #define PIN_RING_K0      39  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_RING_K1      9
+  #define PIN_RING_K2      10
+  #define PIN_RING_SPLAY   11
+
+  #define PIN_PINKY_K0     36  // First knuckle or whole finger if only one pot is attatched
+  #define PIN_PINKY_K1     12
+  #define PIN_PINKY_K2     13
+  #define PIN_PINKY_SPLAY  14
+
+  #define PIN_JOY_X        33
+  #define PIN_JOY_Y        25
+  // Digital Inputs
+  #define PIN_JOY_BTN         23
+  #define PIN_A_BTN           22
+  #define PIN_B_BTN           1
+  #define PIN_MENU_BTN        3
   #define PIN_CALIB           12 //button for recalibration
+  #define PIN_TRIG_BTN        -1 //unused if gesture set
+  #define PIN_GRAB_BTN        -1 //unused if gesture set
+  #define PIN_PNCH_BTN        -1 //unused if gesture set
+  // Ouput pins
   #define PIN_LED             2
-  #define PIN_PINKY_FFB       5  //used for force feedback
-  #define PIN_RING_FFB        18 //^
-  #define PIN_MIDDLE_FFB      19 //^
-  #define PIN_INDEX_FFB       21 //^
-  #define PIN_THUMB_FFB       17 //^
-  #define PIN_HAPTIC          1
-  #define PIN_PINKY_SPLAY     1
-  #define PIN_RING_SPLAY      1
-  #define PIN_MIDDLE_SPLAY    1
-  #define PIN_INDEX_SPLAY     1
-  #define PIN_THUMB_SPLAY     1
+  #define PIN_THUMB_FFB       21
+  #define PIN_INDEX_FFB       19
+  #define PIN_MIDDLE_FFB      18
+  #define PIN_RING_FFB        5
+  #define PIN_PINKY_FFB       17
+  #define PIN_HAPTIC          16
 #endif
 
 // You must install RunningMedian library to use this feature
 // https://www.arduino.cc/reference/en/libraries/runningmedian/
+// TODO: Allow calibration/filtering to be configurable here.
 #define ENABLE_MEDIAN_FILTER false //use the median of the previous values, helps reduce noise
 #define MEDIAN_SAMPLES 20

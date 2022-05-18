@@ -38,8 +38,8 @@ class GrabGesture : public Gesture {
   // Grab gesture is pressed if the average all fingers is more than
   // halfway flexed.
   void readInput() override {
-    value = (index->flexionValue() + middle->flexionValue() +
-             ring->flexionValue() + pinky->flexionValue()) / 4 > ANALOG_MAX / 2;
+    value = (index->curlValue() + middle->curlValue() +
+             ring->curlValue() + pinky->curlValue()) / 4 > ANALOG_MAX / 2;
   }
 
  private:
@@ -56,7 +56,7 @@ class TriggerGesture : public Gesture {
 
   // Trigger gesture is pressed if the index finger is more than halfway flexed
   void readInput() override {
-    value = index_finger->flexionValue() > ANALOG_MAX / 2;
+    value = index_finger->curlValue() > ANALOG_MAX / 2;
   }
 
  private:
@@ -72,7 +72,7 @@ class PinchGesture : public Gesture {
   // halfway flexed.
   void readInput() override {
     // TODO: Do we need to divide both values here?
-    value = (thumb->flexionValue() + index_finger->flexionValue()) / 2 > ANALOG_MAX / 2;
+    value = (thumb->curlValue() + index_finger->curlValue()) / 2 > ANALOG_MAX / 2;
   }
 
   private:

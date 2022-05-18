@@ -86,7 +86,7 @@ class ClampForceFeedback : public ForceFeedback {
   void updateOutput() override {
     // Since the higher the limit, the less the finger should be able to move, map the finger's position onto
     // the flipped range.
-    int relative_finger_position = map(finger->flexionValue(), ANALOG_MAX, 0, FORCE_FEEDBACK_MIN, FORCE_FEEDBACK_MAX);
+    int relative_finger_position = map(finger->curlValue(), ANALOG_MAX, 0, FORCE_FEEDBACK_MIN, FORCE_FEEDBACK_MAX);
 
     // Lock or unlock the clamp if the finger is at the limit.
     // Unlock the finger if the user goes too far passed. This means they have
