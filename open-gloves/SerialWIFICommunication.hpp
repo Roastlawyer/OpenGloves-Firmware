@@ -44,12 +44,13 @@ class WIFISerialCommunication : public ICommunication {
   void output(char* data) {
     // Only call this if isOpen() returns true.
     m_client.write(data);
+    m_client.flush();
   }
 
   bool readData(char* input, size_t buffer_size) {
     // Only call this if isOpen() returns true.
     size_t size = m_client.readBytesUntil('\n', input, buffer_size);
-    input[size] = NULL;
+    input[size] = '\0';
     return size > 0;
   }
 };

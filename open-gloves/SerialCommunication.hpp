@@ -33,7 +33,7 @@ class SerialCommunication : public ICommunication {
 
     bool readData(char* input, size_t buffer_size){
       size_t size = Serial.readBytesUntil('\n', input, buffer_size);
-      input[size] = NULL;
+      input[size] = '\0';
       return size > 0;
     }
 };

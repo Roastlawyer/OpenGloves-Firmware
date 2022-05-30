@@ -21,9 +21,9 @@ DecodedOuput* outputs[MAX_OUTPUT_COUNT];
 Calibrated* calibrators[MAX_CALIBRATED_COUNT];
 
 char* encoded_output_string;
-size_t input_count;
-size_t output_count;
-size_t calibrated_count;
+size_t input_count = 0;
+size_t output_count = 0;
+size_t calibrated_count = 0;
 
 // Common pattern for registering inputs and outputs
 #define register(source, destination, new_count, existing) \
@@ -45,18 +45,15 @@ void setup() {
   comm->start();
 
   // Register the inputs.
-  input_count = 0;
   register(buttons, inputs, BUTTON_COUNT, input_count);
   register(fingers, inputs, FINGER_COUNT, input_count);
   register(joysticks, inputs, JOYSTICK_COUNT, input_count);
   register(gestures, inputs, GESTURE_COUNT, input_count);
 
   // Register the calibrated inputs
-  calibrated_count = 0;
   register(fingers, calibrators, FINGER_COUNT, calibrated_count);
 
   // Register the outputs.
-  output_count = 0;
   register(force_feedbacks, outputs, FORCE_FEEDBACK_COUNT, output_count);
   register(haptics, outputs, HAPTIC_COUNT, output_count);
 
@@ -66,7 +63,7 @@ void setup() {
     string_size += inputs[i]->getEncodedSize();
   }
 
-  // Add 1 new line and 1 for the null terminator.
+  // Add 1 for new line and 1 for the null terminator.
   encoded_output_string = new char[string_size + 1 + 1];
 
   // Setup all the inputs.

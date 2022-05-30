@@ -25,7 +25,7 @@ struct EncodedInput {
 
   // Get the maximum size of the encoded string this input
   // produces
-  virtual inline int getEncodedSize() const = 0;
+  virtual int getEncodedSize() const = 0;
 
   // Encode the input to a strin the driver can understand.
   virtual int encode(char* output) const = 0;

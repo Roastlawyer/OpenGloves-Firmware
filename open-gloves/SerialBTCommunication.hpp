@@ -27,6 +27,7 @@ class BTSerialCommunication : public ICommunication {
 
   void output(char* data) {
     m_SerialBT.print(data);
+    m_SerialBT.flush();
   }
 
   bool hasData() override {
@@ -35,7 +36,7 @@ class BTSerialCommunication : public ICommunication {
 
   bool readData(char* input, size_t buffer_size) {
     size_t size = m_SerialBT.readBytesUntil('\n', input, buffer_size);
-    input[size] = NULL;
+    input[size] = '\0';
     return size > 0;
   }
 };
