@@ -2,17 +2,18 @@
 #include "HardwareConfig.hpp"
 #include "ICommunication.hpp"
 
-#if COMMUNICATION == COMM_SERIAL
+#if COMMUNICATION == COMM_USB
   #include "SerialCommunication.hpp"
+  ICommunication* comm = new SerialCommunication();
 #elif COMMUNICATION == COMM_BLUETOOTH
   #include "SerialBTCommunication.hpp"
+  ICommunication* comm = new BTSerialCommunication();
 #elif COMMUNICATION == COMM_WIFI
   #include "SerialWIFICommunication.hpp"
+  ICommunication* comm = new WIFISerialCommunication();
 #endif
 
 #define ALWAYS_CALIBRATING CALIBRATION_LOOPS == -1
-
-ICommunication* comm;
 int calibration_count = 0;
 
 // These are composite lists of the hardware defined in the header above.
@@ -34,14 +35,7 @@ do {                                                       \
 } while(false)
 
 void setup() {
-  #if COMMUNICATION == COMM_SERIAL
-    comm = new SerialCommunication();
-  #elif COMMUNICATION == COMM_BLUETOOTH
-    comm = new BTSerialCommunication();
-  #elif COMMUNICATION == COMM_WIFI
-    comm = new WIFISerialCommunication();
-  #endif
-
+  // First thing to do is open the the communication channel.
   comm->start();
 
   // Register the inputs.

@@ -11,15 +11,15 @@
  */
 
 // Which communication protocol to use
-#define COMM_SERIAL     0
+#define COMM_USB        0
 #define COMM_BLUETOOTH  1
 #define COMM_WIFI       2
-#define COMMUNICATION   COMM_SERIAL
+#define COMMUNICATION   COMM_USB
 
 // COMM settings
 #define ENABLE_SYNCHRONOUS_COMM true // Experimental: If enabled, doesn't wait for FFB data before sending new input data.
 #define SERIAL_BAUD_RATE        115200
-#define BT_SERIAL_DEVICE_NAME   "OpenGlove-Left"
+#define BT_DEVICE_NAME          "OpenGlove-Left"
 #define WIFI_SERIAL_SSID        "WIFI SSID here"
 #define WIFI_SERIAL_PASSWORD    "password here"
 #define WIFI_SERIAL_PORT        80
