@@ -116,10 +116,8 @@ class ConfigurableFinger<false, 2, knuckle_offset, CurlCalibrator, SplayCalibrat
     }
 
     // The third knuckle is based on the second knuckle.
-    // The third knuckle starts moving when the second knuckle is about 10% through it's travel.
-    // The third knuckle stops moving when the seccond knuckle is about 50% through it's travel.
-    constexpr int min = ANALOG_MAX * 0.1f;
-    constexpr int max = ANALOG_MAX * 0.5f;
+    constexpr int min = ANALOG_MAX * KNUCKLE_DEPENDENCY_START;
+    constexpr int max = ANALOG_MAX * KNUCKLE_DEPENDENCY_END;
     values[2] = accurateMap(constrain(values[1], min, max), min, max, 0, ANALOG_MAX);
   }
 

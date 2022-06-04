@@ -62,6 +62,9 @@
 #define INVERT_CURL         false
 #define INVERT_SPLAY        false
 #define KNUCKLE_COUNT       1 // How many knuckles each finger has
+// Used for 2 knuckle mode to estimate the 3rd knuckle
+#define KNUCKLE_DEPENDENCY_START 0.10f // Percentage (10%) of K1 motion before K2 starts moving
+#define KNUCKLE_DEPENDENCY_END   0.50f // Percentage (50%) of K1 motion where K2 finishes moving
 
 // Calibration Settings (See Calibration.hpp for more information)
 #define CALIBRATION_LOOPS   -1 // How many loops should be calibrated. Set to -1 to always be calibrated.
