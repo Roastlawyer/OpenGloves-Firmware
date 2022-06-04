@@ -25,8 +25,15 @@ class Calibrated {
   bool calibrate;
 };
 
+template<typename T>
+struct Calibrator {
+  virtual void reset() = 0;
+  virtual void update(T input) = 0;
+  virtual T calibrate(T input) const = 0;
+};
+
 template<typename T, T output_min, T output_max>
-class MinMaxCalibrator {
+class MinMaxCalibrator : public Calibrator<T> {
  public:
   MinMaxCalibrator() : value_min(output_max), value_max(output_min) {}
 
@@ -59,7 +66,7 @@ class MinMaxCalibrator {
 };
 
 template<typename T, T sensor_max, T driver_max_deviation, T output_min, T output_max>
-class CenterPointDeviationCalibrator {
+class CenterPointDeviationCalibrator : public Calibrator<T> {
  public:
   CenterPointDeviationCalibrator() : range_min(sensor_max), range_max(0) {}
 
@@ -70,8 +77,8 @@ class CenterPointDeviationCalibrator {
 
   void update(T input) {
     // Update the min and the max.
-    if (input < range_min) range_min = simpleAccurateMap(input, output_max, sensor_max);
-    if (input > range_max) range_max = simpleAccurateMap(input, output_max, sensor_max);
+    if (input < range_min) range_min = accurateMap(input, output_min, output_max, 0, sensor_max);
+    if (input > range_max) range_max = accurateMap(input, output_min, output_max, 0, sensor_max);
   }
 
   T calibrate(T input) const {
@@ -79,7 +86,7 @@ class CenterPointDeviationCalibrator {
     T center = (range_min + range_max) / 2.0f;
 
     // Map the input to the sensor range of motion.
-    T output = simpleAccurateMap(input, output_max, sensor_max);
+    T output = accurateMap(input, output_min, output_max, 0, sensor_max);
 
     // Find the deviation from the center and constrain it to the maximum that the driver supports.
     output = constrain(output - center, -driver_max_deviation, driver_max_deviation);
@@ -91,4 +98,25 @@ class CenterPointDeviationCalibrator {
  private:
   T range_min;
   T range_max;
+};
+
+template<typename T, T sensor_max, T driver_max_deviation, T output_min, T output_max>
+class FixedCenterPointDeviationCalibrator : public Calibrator<T> {
+ public:
+  void reset() {}
+  void update(T input) {}
+
+  T calibrate(T input) const {
+    // Find the center point of the sensor so we know how much we have deviated from it.
+    T center = sensor_max / 2.0f;
+
+    // Map the input to the sensor range of motion.
+    T output = accurateMap(input, output_min, output_max, 0, sensor_max);
+
+    // Find the deviation from the center and constrain it to the maximum that the driver supports.
+    output = constrain(output - center, -driver_max_deviation, driver_max_deviation);
+
+    // Finally map the deviation from the center back to the output range.
+    return map(output, -driver_max_deviation, driver_max_deviation, output_min, output_max);
+  }
 };
