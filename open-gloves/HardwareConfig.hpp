@@ -25,8 +25,8 @@ Button* buttons[BUTTON_COUNT] = {
   #if ENABLE_JOYSTICK
     new Button(EncodedInput::Type::JOY_BTN, PIN_JOY_BTN, INVERT_JOY),
   #endif
-  #if !TRIGGER_GESTURE
-    new Button(EncodedInput::Type::TRIGGER, PIN_TRIG_BTN, INVERT_TRIGGER),
+  #if TRIGGER_BUTTON
+    new Button(EncodedInput::Type::TRIGGER, PIN_TRIGGER, INVERT_TRIGGER),
   #endif
   #if !GRAB_GESTURE
     new Button(EncodedInput::Type::GRAB, PIN_GRAB_BTN, INVERT_GRAB),
@@ -34,7 +34,6 @@ Button* buttons[BUTTON_COUNT] = {
   #if !PINCH_GESTURE
     new Button(EncodedInput::Type::PINCH, PIN_PNCH_BTN, INVERT_PINCH),
   #endif
-
 };
 
 #if !ENABLE_SPLAY
@@ -65,13 +64,16 @@ Finger* fingers[FINGER_COUNT] = {
 JoyStickAxis* joysticks[JOYSTICK_COUNT] = {
   #if ENABLE_JOYSTICK
     new JoyStickAxis(EncodedInput::Type::JOY_X, PIN_JOY_X, JOYSTICK_DEADZONE, INVERT_JOY_X),
-    new JoyStickAxis(EncodedInput::Type::JOY_Y, PIN_JOY_Y, JOYSTICK_DEADZONE, INVERT_JOY_Y)
+    new JoyStickAxis(EncodedInput::Type::JOY_Y, PIN_JOY_Y, JOYSTICK_DEADZONE, INVERT_JOY_Y),
+  #endif
+  #if TRIGGER_AXIS
+    new JoyStickAxis(EncodedInput::Type::TRIGGER_ANALOG, PIN_TRIGGER, JOYSTICK_DEADZONE, INVERT_TRIGGER)
   #endif
 };
 
 Gesture* gestures[GESTURE_COUNT] = {
   #if TRIGGER_GESTURE
-    new TriggerGesture(&finger_index),
+    new TriggerGesture(&finger_index, ENABLE_ANALOG_TRIGGER),
   #endif
   #if GRAB_GESTURE
     new GrabGesture(&finger_index, &finger_middle, &finger_ring, &finger_pinky),

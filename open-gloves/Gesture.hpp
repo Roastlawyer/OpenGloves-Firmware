@@ -51,16 +51,33 @@ class GrabGesture : public Gesture {
 
 class TriggerGesture : public Gesture {
  public:
-  TriggerGesture(const Finger* index_finger) :
-    Gesture(EncodedInput::Type::TRIGGER), index_finger(index_finger) {}
+  TriggerGesture(const Finger* index_finger, bool analog) :
+    Gesture(analog ? EncodedInput::Type::TRIGGER_ANALOG : EncodedInput::Type::TRIGGER), index_finger(index_finger), analog(analog) {}
 
   // Trigger gesture is pressed if the index finger is more than halfway flexed
   void readInput() override {
-    value = index_finger->flexionValue() > ANALOG_MAX / 2;
+    if (analog) {
+      value = index_finger->flexionValue();
+    } else {
+      value = index_finger->flexionValue() > ANALOG_MAX / 2;
+    }
+  }
+
+  inline int getEncodedSize() const override {
+    return analog ? 6 : this->Gesture::getEncodedSize();
+  }
+
+  int encode(char* output) const override {
+    if (analog) {
+      return snprintf(output, getEncodedSize(), "%c%d", type, value);
+    } else {
+      return this->Gesture::encode(output);
+    }
   }
 
  private:
    const Finger* index_finger;
+   bool analog;
 };
 
 class PinchGesture : public Gesture {
