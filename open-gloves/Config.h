@@ -72,7 +72,7 @@
 #define CALIBRATION_CURL    MinMaxCalibrator<int, 0, ANALOG_MAX>
 #define DRIVER_MAX_SPLAY    20  // The maximum deviation from the center point the driver supports.
 #define SENSOR_MAX_SPLAY    270 // The maximum total range of rotation of the sensor.
-#define CALIBRATION_SPLAY   CenterPointDeviationCalibrator<int, SENSOR_MAX_SPLAY, DRIVER_MAX_SPLAY, 0, ANALOG_MAX>
+#define CALIBRATION_SPLAY   FixedCenterPointDeviationCalibrator<int, SENSOR_MAX_SPLAY, DRIVER_MAX_SPLAY, 0, ANALOG_MAX>
 
 // Gesture enables, make false to use button override
 #define TRIGGER_GESTURE true
