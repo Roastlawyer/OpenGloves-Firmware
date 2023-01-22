@@ -16,12 +16,22 @@ StatusLED led(PIN_LED);
 
 struct {
   void setup() {
-    pinMode(MUX_SEL_0, OUTPUT);
-    pinMode(MUX_SEL_1, OUTPUT);
-    pinMode(MUX_SEL_2, OUTPUT);
-    pinMode(MUX_SEL_3, OUTPUT);
+    #if ENABLE_MULTIPLEXER
+      pinMode(MUX_SEL_0, OUTPUT);
+      pinMode(MUX_SEL_1, OUTPUT);
+      pinMode(MUX_SEL_2, OUTPUT);
+      pinMode(MUX_SEL_3, OUTPUT);
+    #endif
   }
 } multiplexer;
+
+struct {
+  void setup() {
+    #if ENABLE_PCA_9865_SERVO
+      // TODO(roastlawyer): i2c setup here.
+    #endif
+  }
+} i2c;
 
 // This button is referenced directly by the FW, so we need a pointer to it outside
 // the list of buttons.

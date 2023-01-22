@@ -98,6 +98,8 @@
 #define FORCE_FEEDBACK_MAX        1000 // Value of 1000 means maximum limit.
 #define FORCE_FEEDBACK_RELEASE      50 // To prevent hardware damage, value passed the limit for when to release FFB. (Set to FORCE_FEEDBACK_MAX to disable)
 
+#define ENABLE_MULTIPLEXER false
+
 // Counts of objects in the system used for looping
 // Inputs
 #define GESTURE_COUNT        (TRIGGER_GESTURE + GRAB_GESTURE + PINCH_GESTURE)
@@ -186,3 +188,13 @@
 // https://www.arduino.cc/reference/en/libraries/runningmedian/
 #define ENABLE_MEDIAN_FILTER false //use the median of the previous values, helps reduce noise
 #define MEDIAN_SAMPLES 20
+
+// You must install Seeed-PCA9685 Library
+// https://github.com/Seeed-Studio/Seeed_PCA9685
+#define ENABLE_PCA_9865_SERVO true
+#if ENABLE_PCA_9865_SERVO
+  #define MIN_PULSE_WIDTH 100
+  #define MAX_PULSE_WIDTH 525
+#endif
+#define PIN_I2C_SDA         16
+#define PIN_I2C_SCL         22
