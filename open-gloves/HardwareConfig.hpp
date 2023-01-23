@@ -12,6 +12,10 @@
 #include "LED.hpp"
 #include "Pin.hpp"
 
+#if ENABLE_PCA_9865_SERVO
+  #include <Wire.h>
+#endif
+
 StatusLED led(PIN_LED);
 
 struct {
@@ -28,10 +32,19 @@ struct {
 struct {
   void setup() {
     #if ENABLE_PCA_9865_SERVO
-      // TODO(roastlawyer): i2c setup here.
+      Wire.begin(PIN_I2C_SDA, PIN_I2C_SCL);
+      Serial.println("I2C Initialized");
     #endif
   }
 } i2c;
+
+struct {
+  void setup() {
+    #if ENABLE_PCA_9865_SERVO
+      Initialize_PCA9685_Board();
+    #endif
+  }
+} PCA9685_Board;
 
 // This button is referenced directly by the FW, so we need a pointer to it outside
 // the list of buttons.

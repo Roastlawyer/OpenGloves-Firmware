@@ -189,12 +189,19 @@
 #define ENABLE_MEDIAN_FILTER false //use the median of the previous values, helps reduce noise
 #define MEDIAN_SAMPLES 20
 
-// You must install Seeed-PCA9685 Library
-// https://github.com/Seeed-Studio/Seeed_PCA9685
-#define ENABLE_PCA_9865_SERVO true
+
+
+// You must install the Adafruit PCA9685 PWM Servo Driver Library 
+// https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
+
+#define ENABLE_PCA_9865_SERVO           false
+#define PWM_Board_0_I2C_ADDRESS         0x40    //The I2C address of the above PCA9685 Board, Default is 0x40
+#define PWM_Board_0_PWM_FREQUENCY       50      //set the PWM frequency the board uses, default is 50hz (20ms Cycles) which is what most analogue servos use
+
 #if ENABLE_PCA_9865_SERVO
-  #define MIN_PULSE_WIDTH 100
-  #define MAX_PULSE_WIDTH 525
+  #define ServoMin_uS                   400     // Min microsecond pulse length, moves servo to 0* or fully retracted position. Value for sg90 and mg90s by default (ESP32Servo default is 500)
+  #define ServoMax_uS                   2400    // Max microsecond pulse length, moves servo to 180* or whatever it's max rotation position is. Value for sg90 and mg90s by default (ESP32Servo default is 2500)
 #endif
-#define PIN_I2C_SDA         16
-#define PIN_I2C_SCL         22
+
+#define PIN_I2C_SDA         0
+#define PIN_I2C_SCL         0
