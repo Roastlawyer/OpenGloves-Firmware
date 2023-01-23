@@ -41,8 +41,11 @@ void setup() {
   // Setup the multiplexer
   multiplexer.setup();
 
-  // Setup the multiplexer
+  // Setup I2C
   i2c.setup();
+
+  // Setup PCA9685
+  PCA9685_Board.setup();
 
   // Register the inputs.
   register(buttons, inputs, BUTTON_COUNT, input_count);
