@@ -74,6 +74,12 @@
 #define GRAB_GESTURE    true
 #define PINCH_GESTURE   (true && ENABLE_THUMB) // Cannot be enabled if there is no thumb
 
+// Used to enable the analog mode for the trigger. If this is enabled and TRIGGER_GESTURE, we will
+// treat the PIN_TRIGGER as a JoyStickAxis.
+#define ENABLE_ANALOG_TRIGGER false
+#define TRIGGER_BUTTON !TRIGGER_GESTURE && !ENABLE_ANALOG_TRIGGER
+#define TRIGGER_AXIS !TRIGGER_GESTURE && ENABLE_ANALOG_TRIGGER
+
 // Force Feedback and haptic settings
 // Force feedback allows you to feel the solid objects you hold
 // Haptics provide vibration.
@@ -104,8 +110,8 @@
 // Inputs
 #define GESTURE_COUNT        (TRIGGER_GESTURE + GRAB_GESTURE + PINCH_GESTURE)
 #define FINGER_COUNT         (ENABLE_THUMB ? 5 : 4)
-#define JOYSTICK_COUNT       (ENABLE_JOYSTICK ? 2 : 0)
-#define BUTTON_COUNT         (4 + ENABLE_JOYSTICK + !TRIGGER_GESTURE + !GRAB_GESTURE + !PINCH_GESTURE)
+#define JOYSTICK_COUNT       (ENABLE_JOYSTICK ? 2 : 0) + (TRIGGER_AXIS ? 1 : 0)
+#define BUTTON_COUNT         (4 + ENABLE_JOYSTICK + (TRIGGER_BUTTON ? 1 : 0) + !GRAB_GESTURE + !PINCH_GESTURE)
 // Ouputs
 #define HAPTIC_COUNT         (ENABLE_HAPTICS ? 1 : 0)
 #define FORCE_FEEDBACK_COUNT (ENABLE_FORCE_FEEDBACK ? FINGER_COUNT : 0)
@@ -128,7 +134,7 @@
   #define PIN_A_BTN           8
   #define PIN_B_BTN           9
   #define PIN_MENU_BTN        8
-  #define PIN_TRIG_BTN        10 //unused if gesture set
+  #define PIN_TRIGGER         10 //unused if gesture set
   #define PIN_GRAB_BTN        11 //unused if gesture set
   #define PIN_PNCH_BTN        12 //unused if gesture set
   #define PIN_CALIB           13 //button for recalibration
@@ -166,7 +172,7 @@
   #define PIN_A_BTN           27
   #define PIN_B_BTN           14
   #define PIN_MENU_BTN        27
-  #define PIN_TRIG_BTN        12 //unused if gesture set
+  #define PIN_TRIGGER         12 //unused if gesture set
   #define PIN_GRAB_BTN        13 //unused if gesture set
   #define PIN_PNCH_BTN        23 //unused if gesture set
   #define PIN_CALIB           12 //button for recalibration
