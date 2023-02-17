@@ -16,7 +16,8 @@ struct EncodedInput {
     GRAB = 'L',
     PINCH = 'M',
     MENU = 'N',
-    CALIBRATE = 'O'
+    CALIBRATE = 'O', 
+    TRIGGER_ANALOG = 'P'
   };
 
   static constexpr char* CurlFormat = "%c%d";
