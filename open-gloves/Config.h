@@ -182,7 +182,7 @@
   #define MUX_SEL_2           32
   #define MUX_SEL_3           33
   #define PIN_LED             2
-  #define PIN_PINKY_FFB       5  //used for force feedback
+  #define PIN_PINKY_FFB       5  //used for force feedback **alternatively this is which board channel you are plugged into on the PCA9685 servodriver board (accepted values 0-15 in that case)**
   #define PIN_RING_FFB        18 //^
   #define PIN_MIDDLE_FFB      19 //^
   #define PIN_INDEX_FFB       21 //^
