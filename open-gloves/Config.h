@@ -203,6 +203,8 @@
   // Ouput pins
   // These pins do not support multiplexing since pins are shared, any set output would only last
   // until the multiplex changes it's connection.
+  //The _FFB Pins are the pins used for the PWM Output for forcefeedback servos **Alternativly when using the PCA9685 for FFB they
+  //control which board channel you are plugged into on the PCA9685 servodriver board (accepted values 0-15 in that case)**
   #define MUX_SEL_0        26
   #define MUX_SEL_1        27
   #define MUX_SEL_2        14
@@ -221,3 +223,20 @@
 // TODO: Allow calibration/filtering to be configurable here.
 #define ENABLE_MEDIAN_FILTER false //use the median of the previous values, helps reduce noise
 #define MEDIAN_SAMPLES 20
+
+
+
+// You must install the Adafruit PCA9685 PWM Servo Driver Library to use this feature
+// https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
+
+#define ENABLE_PCA_9865_SERVO           false
+#define PWM_Board_0_I2C_ADDRESS         0x40    //The I2C address of the above PCA9685 Board, Default is 0x40
+#define PWM_Board_0_PWM_FREQUENCY       50      //set the PWM frequency the board uses, default is 50hz (20ms Cycles) which is what most analogue servos use
+
+#if ENABLE_PCA_9865_SERVO
+  #define ServoMin_uS                   400     // Min microsecond pulse length, moves servo to 0* or fully retracted position. Value for sg90 and mg90s by default (ESP32Servo default is 500)
+  #define ServoMax_uS                   2400    // Max microsecond pulse length, moves servo to 180* or whatever it's max rotation position is. Value for sg90 and mg90s by default (ESP32Servo default is 2500)
+#endif
+
+#define PIN_I2C_SDA         0
+#define PIN_I2C_SCL         0

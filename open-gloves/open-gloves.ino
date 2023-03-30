@@ -38,6 +38,15 @@ void setup() {
   // First thing to do is open the the communication channel.
   comm->start();
 
+  // Setup the multiplexer
+  multiplexer.setup();
+
+  // Setup I2C
+  i2c.setup();
+
+  // Setup PCA9685
+  PCA9685_Board.setup();
+
   // Register the inputs.
   register(buttons, inputs, BUTTON_COUNT, input_count);
   register(fingers, inputs, FINGER_COUNT, input_count);
@@ -72,9 +81,6 @@ void setup() {
 
   // Setup the StatusLED.
   led.setup();
-
-  // Setup the multiplexer
-  multiplexer.setup();
 
   if (ALWAYS_CALIBRATING) {
     for (size_t i = 0; i < calibrated_count; i++) {

@@ -3,7 +3,9 @@
 #include "DriverProtocol.hpp"
 #include "Finger.hpp"
 
-#if defined(ESP32)
+#if ENABLE_PCA_9865_SERVO
+  #include "PCA9685Servo.hpp"
+#elif defined(ESP32)
   #include <ESP32Servo.h>
 #else
   #include <Servo.h>
