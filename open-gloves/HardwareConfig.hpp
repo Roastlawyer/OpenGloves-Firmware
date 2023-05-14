@@ -11,6 +11,7 @@
 #include "JoyStick.hpp"
 #include "LED.hpp"
 #include "Pin.hpp"
+#include "Wrist.hpp"
 
 #if ENABLE_PCA_9865_SERVO
   #include <Wire.h>
@@ -101,6 +102,13 @@ JoyStickAxis* joysticks[JOYSTICK_COUNT] = {
   #endif
   #if TRIGGER_AXIS
     new JoyStickAxis(EncodedInput::Type::TRIGGER_ANALOG, PIN_TRIGGER, JOYSTICK_DEADZONE, INVERT_TRIGGER)
+  #endif
+};
+
+WristAxis* wrist[WRIST_COUNT] = {
+  #if TRACK_WRIST
+    new WristAxis(EncodedInput::Type::WRIST_PITCH, PIN_WRIST_PITCH, INVERT_WRIST_PITCH),
+    new WristAxis(EncodedInput::Type::WRIST_YAW, PIN_WRIST_YAW, INVERT_WRIST_YAW),
   #endif
 };
 

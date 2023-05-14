@@ -62,6 +62,11 @@
 #define INVERT_CURL         false
 #define INVERT_SPLAY        false
 
+// Wrist Settings
+#define TRACK_WRIST         false  //Track Pitch & Yaw of wrist relative to forearm
+#define INVERT_WRIST_PITCH  false
+#define INVERT_WRIST_YAW    false
+
 // Calibration Settings (See Calibration.hpp for more information)
 #define CALIBRATION_LOOPS   -1 // How many loops should be calibrated. Set to -1 to always be calibrated.
 #define CALIBRATION_CURL    MinMaxCalibrator<int, 0, ANALOG_MAX>
@@ -110,13 +115,14 @@
 // Inputs
 #define GESTURE_COUNT        (TRIGGER_GESTURE + GRAB_GESTURE + PINCH_GESTURE)
 #define FINGER_COUNT         (ENABLE_THUMB ? 5 : 4)
+#define WRIST_COUNT          (TRACK_WRIST ? 2 : 0)            //PITCH & YAW
 #define JOYSTICK_COUNT       (ENABLE_JOYSTICK ? 2 : 0) + (TRIGGER_AXIS ? 1 : 0)
 #define BUTTON_COUNT         (4 + ENABLE_JOYSTICK + (TRIGGER_BUTTON ? 1 : 0) + !GRAB_GESTURE + !PINCH_GESTURE)
 // Ouputs
 #define HAPTIC_COUNT         (ENABLE_HAPTICS ? 1 : 0)
 #define FORCE_FEEDBACK_COUNT (ENABLE_FORCE_FEEDBACK ? FINGER_COUNT : 0)
 // Used for array allocations.
-#define MAX_INPUT_COUNT      (BUTTON_COUNT+FINGER_COUNT+JOYSTICK_COUNT+GESTURE_COUNT)
+#define MAX_INPUT_COUNT      (BUTTON_COUNT+FINGER_COUNT+JOYSTICK_COUNT+GESTURE_COUNT+WRIST_COUNT)
 #define MAX_CALIBRATED_COUNT FINGER_COUNT
 #define MAX_OUTPUT_COUNT     (HAPTIC_COUNT + FORCE_FEEDBACK_COUNT)
 
@@ -150,6 +156,8 @@
   #define PIN_MIDDLE_SPLAY    1
   #define PIN_INDEX_SPLAY     1
   #define PIN_THUMB_SPLAY     1
+  #define PIN_WRIST_PITCH     1
+  #define PIN_WRIST_YAW       1
 #elif defined(ESP32)
   //(This configuration is for ESP32 DOIT V1 so make sure to change if you're on another board)
   // Analog Inputs
@@ -167,6 +175,8 @@
   #define PIN_THUMB_SPLAY     DirectPin<1>()
   #define MUX_INPUT_A         DirectPin<34>()
   #define MUX_INPUT_B         DirectPin<35>()
+  #define PIN_WRIST_PITCH     DirectPin<1>()
+  #define PIN_WRIST_YAW       DirectPin<1>()
   // Digital Imputs
   #define PIN_JOY_BTN         26
   #define PIN_A_BTN           27

@@ -52,6 +52,7 @@ void setup() {
   register(fingers, inputs, FINGER_COUNT, input_count);
   register(joysticks, inputs, JOYSTICK_COUNT, input_count);
   register(gestures, inputs, GESTURE_COUNT, input_count);
+  register(wrist, inputs, WRIST_COUNT, input_count);
 
   // Register the calibrated inputs
   register(fingers, calibrators, FINGER_COUNT, calibrated_count);
