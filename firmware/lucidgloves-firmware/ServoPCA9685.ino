@@ -20,6 +20,7 @@ class PCA9685ServoConnection : public IServo
 
     void InitServoInterface(){
       Setup_I2C();
+      Servo objforsetupServo; //Needed based on the code in PCA9685Servo.cpp. A servo obj must be created to initialize the PCA board, however the normal 5 servos are created BEFORE I2C is initialized, meaning the code otherwise runs before I2C exists to transmit setup info.
       m_isReady = true;
     }
 };

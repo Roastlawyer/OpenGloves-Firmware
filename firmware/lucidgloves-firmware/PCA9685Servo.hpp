@@ -17,5 +17,6 @@ private:
   int minMicroSeconds = ServoMin_uS;                  // microsecond value to move servo to 0* or fully retracted position  
   int maxMicroSeconds = ServoMax_uS;                  // microsecond value to move servo to 180* or whatever it's max rotation position is  
   int driverChannel = 0;                          // driverboard channel connected to the servo
-  Adafruit_PWMServoDriver pwm_board_0;
+  //Adafruit_PWMServoDriver pwm_board_0;
+  Adafruit_PWMServoDriver pwm_board_0 = Adafruit_PWMServoDriver(PWM_Board_0_I2C_ADDRESS, Wire); //Needed addition so the library actually knows what address to use to communicate with the board
 };

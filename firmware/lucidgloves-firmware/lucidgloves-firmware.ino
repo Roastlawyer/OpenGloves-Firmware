@@ -19,7 +19,7 @@
 
 //ANALOG INPUT CONFIG
 #define USING_SPLAY false //whether or not your glove tracks splay. - tracks the side to side "wag" of fingers. Requires 5 more inputs.
-#define USING_MULTIPLEXER true //Whether or not you are using a multiplexer for inputs
+#define USING_MULTIPLEXER false //Whether or not you are using a multiplexer for inputs
 #define FLIP_FLEXION  false  //Flip values from potentiometers (for fingers!) if they are backwards
 #define FLIP_SPLAY true //Flip values for splay
 
@@ -56,16 +56,16 @@
 #define USING_CALIB_PIN true //When PIN_CALIB is shorted (or it's button pushed) it will reset calibration if this is on.
 
 //servo Configuration
-#define USING_FORCE_FEEDBACK false //Force feedback haptics allow you to feel the solid objects you hold
-#define SERVO_INTERFACE SERVO_DIRECT  //How your servos are connected. Options are: SERVO_DIRECT (mcu gpio pins), SERVO_PCA9685 (through I2C PCA9685 board)
+#define USING_FORCE_FEEDBACK true //Force feedback haptics allow you to feel the solid objects you hold
+#define SERVO_INTERFACE SERVO_PCA9685  //How your servos are connected. Options are: SERVO_DIRECT (mcu gpio pins), SERVO_PCA9685 (through I2C PCA9685 board)
   //servos through gpio Pins
 
   //servos through PCA9685
     // To use you must install the Adafruit PCA9685 PWM Servo Driver Library 
     // https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
   #if SERVO_INTERFACE == SERVO_PCA9685
-    #define PIN_I2C_SDA         -1     //Pin to use for the I2C SDA line connected to the PCA9685
-    #define PIN_I2C_SCL         -1     //Pin to use for the I2C SCL line connected to the PCA9685
+    #define PIN_I2C_SDA         18     //Pin to use for the I2C SDA line connected to the PCA9685
+    #define PIN_I2C_SCL         19     //Pin to use for the I2C SCL line connected to the PCA9685
   #endif
 #define FLIP_FORCE_FEEDBACK true
 #define SERVO_SCALING false //dynamic scaling of servo motors
@@ -73,27 +73,27 @@
 #if defined(ESP32)
   //(This configuration is for ESP32 DOIT V1 so make sure to change if you're on another board)
   //To use a pin on the multiplexer, use MUX(pin). So for example pin 15 on a mux would be MUX(15).
-  #define PIN_PINKY     MUX(12) //These 5 are for flexion
-  #define PIN_RING      MUX(9)
-  #define PIN_MIDDLE    MUX(6)
-  #define PIN_INDEX     MUX(3)
-  #define PIN_THUMB     MUX(0)
-  #define PIN_JOY_X     33
-  #define PIN_JOY_Y     25
-  #define PIN_JOY_BTN   26
-  #define PIN_A_BTN     27 
-  #define PIN_B_BTN     14
-  #define PIN_TRIG_BTN  12 //unused if gesture set
-  #define PIN_GRAB_BTN  13 //unused if gesture set
-  #define PIN_PNCH_BTN  23 //unused if gesture set
-  #define PIN_CALIB     32 //button for recalibration (You can set this to GPIO0 to use the BOOT button, but only when using Bluetooth.)
+  #define PIN_PINKY     36 //These 5 are for flexion
+  #define PIN_RING      -1
+  #define PIN_MIDDLE    -1
+  #define PIN_INDEX     -1
+  #define PIN_THUMB     -1
+  #define PIN_JOY_X     -1
+  #define PIN_JOY_Y     -1
+  #define PIN_JOY_BTN   -1
+  #define PIN_A_BTN     -1
+  #define PIN_B_BTN     -1
+  #define PIN_TRIG_BTN  -1 //unused if gesture set
+  #define PIN_GRAB_BTN  -1 //unused if gesture set
+  #define PIN_PNCH_BTN  -1 //unused if gesture set
+  #define PIN_CALIB     -1 //button for recalibration (You can set this to GPIO0 to use the BOOT button, but only when using Bluetooth.)
   #define DEBUG_LED 2
-  #define PIN_PINKY_MOTOR     19  //used for force feedback **alternatively this is which board channel you are plugged into on the PCA9685 servodriver board (accepted values 0-15 in that case)**
-  #define PIN_RING_MOTOR      18 //^
-  #define PIN_MIDDLE_MOTOR    5 //^
-  #define PIN_INDEX_MOTOR     17 //^
-  #define PIN_THUMB_MOTOR     16 //^
-  #define PIN_MENU_BTN        34
+  #define PIN_PINKY_MOTOR     12  //used for force feedback **alternatively this is which board channel you are plugged into on the PCA9685 servodriver board (accepted values 0-15 in that case)**
+  #define PIN_RING_MOTOR      13 //^
+  #define PIN_MIDDLE_MOTOR    13 //^
+  #define PIN_INDEX_MOTOR     13 //^
+  #define PIN_THUMB_MOTOR     13 //^
+  #define PIN_MENU_BTN        -1
 
   //Splay pins. Only used for splay tracking gloves. Use MUX(pin) if you are using a multiplexer for it.
   #define PIN_PINKY_SPLAY  MUX(14)
@@ -104,16 +104,16 @@
   
 
   //Select pins for multiplexers, set as needed if using a mux. You can add or remove pins as needed depending on how many select pins your mux needs.
-  #define PINS_MUX_SELECT     27,  /*S0 pin*/ \
-                              14,  /*S1 pin*/ \
-                              12,  /*S2 pin*/ \
-                              13   /*S3 pin (if your mux is 3-bit like 74HC4051 then you can remove this line and the backslash before it.)*/
+  #define PINS_MUX_SELECT     -1,  /*S0 pin*/ \
+                              -1,  /*S1 pin*/ \
+                              -1,  /*S2 pin*/ \
+                              -1   /*S3 pin (if your mux is 3-bit like 74HC4051 then you can remove this line and the backslash before it.)*/
   
   #define MUX_INPUT 35  //the input or SIG pin of the multiplexer. This can't be a mux pin.
 
   //Signal mixing for finger values. Options are: MIXING_NONE, MIXING_SINCOS
   //For double rotary hall effect sensors use MIXING_SINCOS. For potentiometers use MIXING_NONE.
-  #define FLEXION_MIXING MIXING_SINCOS
+  #define FLEXION_MIXING MIXING_NONE
     //Secondary analog pins for mixing flexion values. Only used by MIXING_SINCOS. Use MUX(pin) if you are using a multiplexer for it.
     #define PIN_PINKY_SECOND     MUX(13) 
     #define PIN_RING_SECOND      MUX(10)
