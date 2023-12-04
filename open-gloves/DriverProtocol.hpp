@@ -18,8 +18,9 @@ struct EncodedInput {
     MENU = 'N',
     CALIBRATE = 'O',
     TRIGGER_ANALOG = 'P',
-    WRIST_PITCH = 'Q',
-    WRIST_YAW = 'R',
+    WRIST_ROLL = 'Q',
+    WRIST_PITCH = 'R',
+    WRIST_YAW = 'S',
   };
 
 

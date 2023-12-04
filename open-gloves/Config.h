@@ -63,7 +63,8 @@
 #define INVERT_SPLAY        false
 
 // Wrist Settings
-#define TRACK_WRIST         false  //Track Pitch & Yaw of wrist relative to forearm
+#define TRACK_WRIST         false  //Track Roll, Pitch, and Yaw of the wrist relative to forearm
+#define INVERT_WRIST_ROLL   false
 #define INVERT_WRIST_PITCH  false
 #define INVERT_WRIST_YAW    false
 
@@ -115,7 +116,7 @@
 // Inputs
 #define GESTURE_COUNT        (TRIGGER_GESTURE + GRAB_GESTURE + PINCH_GESTURE)
 #define FINGER_COUNT         (ENABLE_THUMB ? 5 : 4)
-#define WRIST_COUNT          (TRACK_WRIST ? 2 : 0)            //PITCH & YAW
+#define WRIST_COUNT          (TRACK_WRIST ? 3 : 0)            //ROLL, PITCH, & YAW
 #define JOYSTICK_COUNT       (ENABLE_JOYSTICK ? 2 : 0) + (TRIGGER_AXIS ? 1 : 0)
 #define BUTTON_COUNT         (4 + ENABLE_JOYSTICK + (TRIGGER_BUTTON ? 1 : 0) + !GRAB_GESTURE + !PINCH_GESTURE)
 // Ouputs
@@ -156,6 +157,7 @@
   #define PIN_MIDDLE_SPLAY    1
   #define PIN_INDEX_SPLAY     1
   #define PIN_THUMB_SPLAY     1
+  #define PIN_WRIST_ROLL      1
   #define PIN_WRIST_PITCH     1
   #define PIN_WRIST_YAW       1
 #elif defined(ESP32)
@@ -175,6 +177,7 @@
   #define PIN_THUMB_SPLAY     DirectPin<1>()
   #define MUX_INPUT_A         DirectPin<34>()
   #define MUX_INPUT_B         DirectPin<35>()
+  #define PIN_WRIST_ROLL      DirectPin<1>()
   #define PIN_WRIST_PITCH     DirectPin<1>()
   #define PIN_WRIST_YAW       DirectPin<1>()
   // Digital Imputs

@@ -107,6 +107,7 @@ JoyStickAxis* joysticks[JOYSTICK_COUNT] = {
 
 WristAxis* wrist[WRIST_COUNT] = {
   #if TRACK_WRIST
+    new WristAxis(EncodedInput::Type::WRIST_ROLL, PIN_WRIST_ROLL, INVERT_WRIST_ROLL),
     new WristAxis(EncodedInput::Type::WRIST_PITCH, PIN_WRIST_PITCH, INVERT_WRIST_PITCH),
     new WristAxis(EncodedInput::Type::WRIST_YAW, PIN_WRIST_YAW, INVERT_WRIST_YAW),
   #endif
